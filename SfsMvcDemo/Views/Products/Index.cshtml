@@ -1,0 +1,186 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link href="~/assets/css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>InsureE GL</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="/Employees/Index">Employees</a>
+                </li>
+                <li>
+                    <a href="/Products/Index">Products</a>
+                </li>
+                <li>
+                    <a href="/Customers/Index">Customers</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
+                <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
+            </ul>
+        </nav>
+
+        <div id="content">
+
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                            <i class="glyphicon glyphicon-align-left"></i>
+                            <span>Toggle Sidebar</span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+            <div>
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <!-- Filtre Click HTML -->
+                                <div>
+                                    <label>Sorting Options</label>
+                                    <br />
+                                    <button type="button" onclick="load()"  
+                                            class="btn btn-success">Load</button>
+                                    <button type="button" onclick="loadUnitPrice()" class="btn btn-primary">UnitPrice</button>
+                                    <button type="button" onclick="loadUnitsInStock()" class="btn btn-primary">UnitsInStock</button>
+                                    <button type="button" onclick="loadUnitsOnOrder()" class="btn btn-primary">UnitsOnOrder</button>
+                                    <br />
+                                </div>
+                                <br />
+
+                                <!-- Search Click HTML -->
+                                <form>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Product Name</label>
+                                        <input class="form-control" id="ProductName" placeholder="Enter Product Name">                                      
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" onclick="GetByProductNameList()">Submit</button>
+                                </form>
+                                <br />
+
+                                <!-- Load HTML -->
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ProductID</th>
+                                            <th>ProductName</th>
+                                            <th>QuantityPerUnit</th>
+                                            <th>UnitPrice</th>
+                                            <th>UnitsInStock</th>
+                                            <th>UnitsOnOrder</th>
+                                            <th>ReorderLevel</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productsData">
+                                    </tbody>
+                                </table>
+
+                                <!-- Edit Modal HTML -->
+                                <div id="addEmployeeModal" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form>
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Add Employee</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>ProductName</label>
+                                                        <input type="text" id="productName" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>QuantityPerUnit</label>
+                                                        <input type="text" id="quantityPerUnit" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>UnitPrice</label>
+                                                        <input type="text" id="unitPrice" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>TitleOfCourtesy</label>
+                                                        <input type="text" id="titleOfCourtesy" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>City</label>
+                                                        <input type="text" id="city" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Country</label>
+                                                        <input type="text" id="country" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                                    <button id="addProduct" class="btn btn-success">Add</button>                                                 
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Modal HTML -->
+                                <div id="deleteEmployeeModal" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form>
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Delete Employee</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete these Records?</p>
+                                                    <div class="modal-header">
+                                                        <label>Id Giriniz</label>
+                                                        <input id="id" class="form-control" required>
+                                                    </div>
+                                                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                                    <input type="submit" class="btn btn-danger" value="Delete">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="~/assets/js/sidebarCollapse.js"></script>
+    <script src="~/assets/js/ProductsScript.js"></script>
+
+</body>
+</html>

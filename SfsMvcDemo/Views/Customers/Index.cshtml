@@ -1,0 +1,199 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="~/assets/css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>NDC</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="/Employees/Index">Employees</a>
+                </li>
+                <li>
+                    <a href="/Products/Index">Products</a>
+                </li>
+                <li>
+                    <a href="/Customers/Index">Customers</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
+                <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
+            </ul>
+        </nav>
+
+        <div id="content">
+
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                            <i class="glyphicon glyphicon-align-left"></i>
+                            <span>Toggle Sidebar</span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <div>
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <div class="row">
+                            <div class="col-md-12">
+
+
+                                <!-- Filtre Modal HTML -->
+                                <form>
+                                    <div class="form-group">
+                                        <label>Company Name</label>
+                                        <input class="form-control" id="CompanyName" placeholder="Contact Name">
+                                        <small class="form-text text-muted">Just enter the company name.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact Name</label>
+                                        <input class="form-control" id="ContactName" placeholder="Contact Name">
+                                        <small class="form-text text-muted">Just enter the contact name.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact Title</label>
+                                        <input class="form-control" id="ContactTitle" placeholder="Contact Name">
+                                        <small class="form-text text-muted">Just enter the contact title.</small>
+                                    </div>
+                                    <button type="submit" id="ContactNameLoad" class="btn btn-primary" onclick="GetByCustomers();">Load</button>
+                                </form>
+
+                                <br /><br />
+
+                                <!-- Load Modal HTML -->
+                                <table class="table table-hover" id="customersData">
+                                    <thead>
+                                        <tr>
+                                            <th>CustomerID</th>
+                                            <th>CompanyName</th>
+                                            <th>ContactName</th>
+                                            <th>ContactTitle</th>
+                                            <th>Address</th>
+                                            <th>City</th>
+                                            <th>Region</th>
+                                            <th>Country</th>
+                                            <th>Phone</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+
+                                <!-- Edit Modal HTML -->
+                                <div id="addEmployeeModal" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form>
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Add Customer</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>CompanyName</label>
+                                                        <input type="text" id="companyName" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>ContactName</label>
+                                                        <input type="text" id="contactName" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>ContactTitle</label>
+                                                        <input type="text" id="contactTitle" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Address</label>
+                                                        <input type="text" id="address" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>City</label>
+                                                        <input type="text" id="city" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Region</label>
+                                                        <input type="text" id="region" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Country</label>
+                                                        <input type="text" id="country" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Phone</label>
+                                                        <input type="text" id="phone" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                                    <button id="addEmployee" class="btn btn-success">Add</button>
+                                                    @* <input type="submit" class="btn btn-success" value="Add">*@
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Modal HTML -->
+                                <div id="deleteEmployeeModal" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form>
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Delete Employee</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete these Records?</p>
+                                                    <div class="modal-header">
+                                                        <label>Id Giriniz</label>
+                                                        <input id="id" class="form-control" required>
+                                                    </div>
+                                                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                                    <input type="submit" class="btn btn-danger" value="Delete">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="~/assets/js/CustomersScript.js"></script>
+    <script src="~/assets/js/sidebarCollapse.js"></script>
+
+
+</body>
+</html>
